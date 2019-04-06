@@ -6,7 +6,12 @@ const FBAuth = require("./util/fbAuth");
 
 //controllers
 const { getAllScreams, postOneScream } = require("./controllers/screams");
-const { signUp, login } = require("./controllers/users");
+const {
+  signUp,
+  login,
+  uploadImage,
+  addUserDetails
+} = require("./controllers/users");
 
 // SET UP EXPRESS
 const express = require("express");
@@ -22,13 +27,15 @@ const app = express();
 app.get("/screams", getAllScreams);
 //POST REQUEST FOR NEW SCREAMS
 app.post("/scream", FBAuth, postOneScream);
+//UPLOAD IMAGE
+app.post("/user/image", FBAuth, uploadImage);
+//ADD USER DETAILS
+app.post("/user", FBAuth, addUserDetails);
 
 // SIGNUP ROUTE
 app.post("/signup", signUp);
 //LOGIN ROUTE
 app.post("/login", login);
-//UPLOAD IMAGE
-app.post("/user/image", uploadImage);
 
 // https://baseurl.com/api
 exports.api = functions.https.onRequest(app);
