@@ -4,7 +4,7 @@ const config = require("../util/config");
 const firebase = require("firebase");
 firebase.initializeApp(config);
 
-const { validateSignUpData, validateLoginData } = require("../util/validators");
+const Validator = require("../util/validators");
 
 exports.signUp = (req, res) => {
   const newUser = {
@@ -14,10 +14,8 @@ exports.signUp = (req, res) => {
     handle: req.body.handle
   };
 
-  console.log(newUser);
-
   // TODO validate data
-  const { valid, errors } = validateSignUpData(newUser);
+  const { valid, errors } = Validator.validateSignUpData(newUser);
 
   if (!valid) return res.status(400).json(errors);
 
@@ -71,14 +69,15 @@ exports.signUp = (req, res) => {
     });
 };
 
+// LOGIN USER
 exports.login = (req, res) => {
   const user = {
     email: req.body.email,
     password: req.body.password
   };
 
-  // TODO validate data
-  const { valid, errors } = validateLoginData(user);
+  // VALIDATE
+  const { valid, errors } = Validator.validateLoginData(user);
 
   if (!valid) return res.status(400).json(errors);
 
@@ -106,7 +105,106 @@ exports.login = (req, res) => {
 };
 
 // ADD USER DETAILS
-exports.addUserDetails = (req, res) => {};
+exports.addUserDetails = (req, res) => {
+  let userDetails = Validator.reduceUserDetails(req.body);
+
+  db.doc(`/users/${req.user.handle}`)
+    .update(userDetails)
+    .then(() => {
+      return res.status(200).json({ message: "Details added successfully" });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+// GET USERS DETAILS
+exports.getUserDetails = (req, res) => {
+  let userData = {};
+
+  db.doc(`/users/${req.params.handle}`)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        userData.user = doc.data();
+        return db
+          .collection("screams")
+          .where("userHandle", "==", req.params.handle)
+          .orderBy("createdAt", "desc")
+          .get();
+      } else {
+        return res.status(404).json({ error: "User not found" });
+      }
+    })
+    .then(data => {
+      userData.screams = [];
+
+      data.forEach(doc => {
+        userData.screams.push({
+          body: doc.data().body,
+          createdAt: doc.data().createdAt,
+          userHandle: doc.data().userHandle,
+          userImage: doc.data().userImage,
+          likeCount: doc.data().likeCount,
+          commentCount: doc.data().commentCount,
+          screamId: doc.id
+        });
+      });
+      return res.json(userData);
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+// GET AUTHENTICATED USER DETAILS
+exports.getAuthenticatedUserDetails = (req, res) => {
+  let userData = {};
+
+  db.doc(`/users/${req.user.handle}`)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        userData.credentials = doc.data();
+        return db
+          .collection("likes")
+          .where("userHandle", "==", req.user.handle)
+          .get();
+      }
+    })
+    .then(data => {
+      userData.likes = [];
+      data.forEach(doc => {
+        userData.likes.push(doc.data());
+      });
+      return db
+        .collection("notifications")
+        .where("recipient", "==", req.user.handle)
+        .orderBy("createdAt", "desc")
+        .limit(10)
+        .get();
+    })
+    .then(data => {
+      userData.notification = [];
+      data.forEach(doc => {
+        userData.notification.push({
+          recipient: doc.data().recipient,
+          sender: doc.data().sender,
+          createdAt: doc.data().createdAt,
+          screamId: doc.data().screamId,
+          type: doc.data().type,
+          notificationId: doc.id
+        });
+      });
+      return res.json(userData);
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
 
 //UPLOAD USER IMAGE
 exports.uploadImage = (req, res) => {
@@ -164,4 +262,23 @@ exports.uploadImage = (req, res) => {
   });
 
   busboy.end(req.rawBody);
+};
+
+exports.markNotificationRead = (req, res) => {
+  let batch = db.batch();
+
+  req.body.forEach(notificationId => {
+    const notification = db.doc(`/notifications/${notificationId}`);
+    batch.update(notification, { read: true });
+  });
+
+  batch
+    .commit()
+    .then(() => {
+      return res.json({ message: "notification marked read" });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({ error: err.code });
+    });
 };
