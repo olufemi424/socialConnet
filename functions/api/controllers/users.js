@@ -1,8 +1,4 @@
-const { db, admin } = require("../util/admin");
-const config = require("../util/config");
-
-const firebase = require("firebase");
-firebase.initializeApp(config);
+const { db, admin, firebase } = require("../util/admin");
 
 const Validator = require("../util/validators");
 
@@ -63,7 +59,9 @@ exports.signUp = (req, res) => {
                 .json({ email: "Failed, Use a different Email" });
             }
             console.log(err);
-            res.status(500).json({ error: err.code });
+            res
+              .status(500)
+              .json({ general: "Something went wrong, please try again" });
           });
       }
     });
@@ -91,16 +89,11 @@ exports.login = (req, res) => {
       return res.json({ token });
     })
     .catch(err => {
-      if (
-        err.code === "auth/user-not-found" ||
-        err.code === "auth/wrong-password"
-      ) {
-        return res
-          .status(403)
-          .json({ general: "Wrong credentials, please try again" });
-      }
-
-      res.status(500).json({ errors });
+      //"auth/user-not-found"
+      //"auth/wrong-password"
+      return res
+        .status(403)
+        .json({ general: "Wrong credentials, please try again" });
     });
 };
 

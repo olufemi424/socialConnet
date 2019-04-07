@@ -13,7 +13,8 @@ exports.getAllScreams = (req, res) => {
           userHandle: doc.data().userHandle,
           createdAt: doc.data().createdAt,
           commentCount: doc.data().commentCount,
-          likeCount: doc.data().likeCount
+          likeCount: doc.data().likeCount,
+          userImage: doc.data().userImage
         });
       });
       return res.status(200).json(screams);
@@ -21,9 +22,10 @@ exports.getAllScreams = (req, res) => {
     .catch(err => console.log(err));
 };
 
+// POST ONE SCREAM
 exports.postOneScream = (req, res) => {
   if (req.body.body.trim() === "") {
-    return res.status(400).json({ body: "Post must not be empty" });
+    return res.status(400).json({ commentError: "Post must not be empty" });
   }
 
   //   CREATE A NEW SCREAMS
