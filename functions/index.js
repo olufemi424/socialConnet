@@ -38,11 +38,11 @@ app.post("/signup", UserController.signUp);
 app.post("/login", UserController.login);
 
 //USER
-app.post("/user/image", FBAuth, UserController.uploadImage);
 app.post("/user", FBAuth, UserController.addUserDetails);
 app.get("/user", FBAuth, UserController.getAuthenticatedUserDetails);
 app.get("/user/:handle", UserController.getUserDetails);
-// app.get("/notifications", FBAuth, UserController.markNotificationRead);
+app.post("/user/image", FBAuth, UserController.uploadImage);
+app.post("/user/notifications", FBAuth, UserController.markNotificationRead);
 
 // https://baseurl.com/api
 exports.api = functions.https.onRequest(app);
