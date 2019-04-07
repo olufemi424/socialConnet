@@ -249,7 +249,7 @@ exports.deleteScream = (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json({
+      return res.status(500).json({
         error: err.code
       });
     });

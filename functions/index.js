@@ -12,12 +12,6 @@ const screamRoutes = require("./api/routes/screams");
 //DATABASE
 const { db } = require("./api/util/admin");
 
-// const bodyParser = require("body-parser");
-// // parse application/x-www-form-urlencoded
-// app.use(bodyParser.urlencoded({ extended: false }));
-// // parse application/json
-// app.use(bodyParser.json());
-
 //USER
 app.use("/user", userRoutes);
 // SCREAMS
@@ -26,6 +20,7 @@ app.use("/scream", screamRoutes);
 // https://baseurl.com/api
 exports.api = functions.https.onRequest(app);
 
+// CREATE NOTIFICATION ON LIKE
 exports.createNotificationsOnLike = functions.firestore
   .document("likes/{id}")
   .onCreate(snapshot => {
@@ -51,6 +46,7 @@ exports.createNotificationsOnLike = functions.firestore
       });
   });
 
+// CREATE NOTIFICATION ON UNLIKE
 exports.createNotificationsOnUnlike = functions.firestore
   .document("likes/{id}")
   .onDelete(snapshot => {
@@ -62,6 +58,7 @@ exports.createNotificationsOnUnlike = functions.firestore
       });
   });
 
+// CREATE NOTIFICATION ON COMMENT
 exports.createNotificationsOnComment = functions.firestore
   .document("comments/{id}")
   .onCreate(snapshot => {
@@ -82,6 +79,72 @@ exports.createNotificationsOnComment = functions.firestore
             screamId: doc.id
           });
         }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
+// CREATE NOTIFICATION ON COMMENT
+exports.onUserImageChange = functions.firestore
+  .document("users/{userId}")
+  .onUpdate(change => {
+    console.log(change.before.data());
+    console.log(change.after.data());
+
+    if (change.before.data().imageUrl !== change.after.data().imageUrl) {
+      console.log("image had changed");
+      let batch = db.batch();
+      return db
+        .collection("screams")
+        .where("userHandle", "==", change.before.data().handle)
+        .get()
+        .then(data => {
+          data.forEach(doc => {
+            const scream = db.doc(`/screams/${doc.id}`);
+            batch.update(scream, { userImage: change.after.data().imageUrl });
+          });
+          return batch.commit();
+        });
+    } else {
+      return true;
+    }
+  });
+
+//DELETE SCREAMS RELATED NOTIFICATION ON DELETE
+exports.onScreamDelete = functions.firestore
+  .document("/screams/{screamId}")
+  .onDelete((snapshot, context) => {
+    const screamId = context.params.screamId;
+    const batch = db.batch();
+
+    return db
+      .collection("comments")
+      .where("screamId", "==", screamId)
+      .get()
+      .then(data => {
+        data.forEach(doc => {
+          batch.delete(db.doc(`/comments/${doc.id}`));
+        });
+        return db
+          .collection("likes")
+          .where("screamId", "==", screamId)
+          .get();
+      })
+      .then(data => {
+        data.forEach(doc => {
+          batch.delete(db.doc(`/likes/${doc.id}`));
+        });
+        return db
+          .collection("notifications")
+          .where("screamId", "==", screamId)
+          .get();
+      })
+      .then(data => {
+        data.forEach(doc => {
+          batch.delete(db.doc(`/notifications/${doc.id}`));
+        });
+        return batch.commit();
       })
       .catch(err => {
         console.log(err);
