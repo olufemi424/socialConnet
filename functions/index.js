@@ -1,9 +1,14 @@
 const functions = require("firebase-functions");
 const firebase = require("firebase");
+const bodyParser = require("body-parser");
 
 // SET UP EXPRESS
 const express = require("express");
 const app = express();
+
+//CORs
+const cors = require("cors");
+app.use(cors());
 
 //ROUTES
 const userRoutes = require("./api/routes/user");
@@ -11,6 +16,24 @@ const screamRoutes = require("./api/routes/screams");
 
 //DATABASE
 const { db } = require("./api/util/admin");
+
+//body parser
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+//CORES errors handling
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requestd-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH,DELETE");
+    return res.status(200).json({});
+  }
+  next();
+});
 
 //USER
 app.use("/user", userRoutes);

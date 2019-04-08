@@ -33,7 +33,7 @@ exports.validateLoginData = data => {
   let errors = {};
   //validation
   if (isEmpty(data.email)) errors.email = "Email is required";
-  if (isEmpty(data.password)) errors.email = "Password is required";
+  if (isEmpty(data.password)) errors.password = "Password is required";
 
   return {
     errors,
