@@ -27,7 +27,6 @@ export class Home extends Component {
 
   render() {
     const { screams } = this.state;
-    console.log(screams);
     let recentScreamsMarkup = screams ? (
       screams.map(scream => <Scream key={scream.screamId} scream={scream} />)
     ) : (

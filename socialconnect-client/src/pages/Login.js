@@ -38,16 +38,17 @@ export class Login extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.setState({ loading: true });
 
+    //USER DATA
     const userData = {
       email: this.state.email,
       password: this.state.password
     };
-
+    //CALL ACTIONS
     this.props.loginUser(userData, this.props.history);
   };
 
+  // HANDLE CHANGE
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
