@@ -40,9 +40,9 @@ export class SignUp extends Component {
     };
 
     axios
-      .post("/user/login", userData)
+      .post("/user/signup", userData)
       .then(response => {
-        localStorage.setItem("FBIdToekn", `Bearer ${response.data.token}`);
+        localStorage.setItem("FBIdToken", `Bearer ${response.data.token}`);
         this.setState({ loading: false });
         this.props.history.push("/");
       })
@@ -64,13 +64,15 @@ export class SignUp extends Component {
     const { classes } = this.props;
     const { loading, errors } = this.state;
 
+    console.log(this.state);
+
     return (
       <Grid container className={classes.form}>
         <Grid item sm />
         <Grid item sm>
           <img src={AppIcon} alt="App Icon" className={classes.imageStyle} />{" "}
           <Typography variant="h2" className={classes.pageTitle}>
-            Sign Up
+            Sign up
           </Typography>
           <form noValidate onSubmit={this.handleSubmit}>
             <TextField
@@ -97,6 +99,30 @@ export class SignUp extends Component {
               error={errors.password ? true : false}
               fullWidth
             />
+            <TextField
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              label="Confirm Password"
+              className={classes.textField}
+              value={this.state.confirmPassword}
+              onChange={this.handleChange}
+              helperText={errors.confirmPassword}
+              error={errors.confirmPassword ? true : false}
+              fullWidth
+            />
+            <TextField
+              id="handle"
+              name="handle"
+              type="text"
+              label="Handle"
+              className={classes.textField}
+              value={this.state.handle}
+              onChange={this.handleChange}
+              helperText={errors.handle}
+              error={errors.handle ? true : false}
+              fullWidth
+            />
             {errors.general && (
               <Typography variant="body2" className={classes.customError}>
                 {errors.general}
@@ -110,14 +136,14 @@ export class SignUp extends Component {
               disabled={loading}
             >
               {" "}
-              Login
+              Signup
               {loading && (
                 <CircularProgress className={classes.progress} size={30} />
               )}
             </Button>
             <br />
             <small>
-              Don't have an account ? sign up <Link t0="/signup"> here</Link>{" "}
+              Already have an account ? login <Link to="/login"> here</Link>{" "}
             </small>
           </form>
         </Grid>
