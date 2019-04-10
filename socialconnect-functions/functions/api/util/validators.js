@@ -21,7 +21,7 @@ exports.validateSignUpData = data => {
   if (isEmpty(data.password)) errors.password = "Password is required";
   if (data.password !== data.confirmPassword)
     errors.confirmPassword = "Password must match";
-  if (isEmpty(data.handle)) errors.password = "Handle is required";
+  if (isEmpty(data.handle)) errors.handle = "Handle is required";
 
   return {
     errors,

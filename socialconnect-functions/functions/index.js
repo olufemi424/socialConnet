@@ -1,5 +1,4 @@
 const functions = require("firebase-functions");
-const firebase = require("firebase");
 const bodyParser = require("body-parser");
 
 // SET UP EXPRESS

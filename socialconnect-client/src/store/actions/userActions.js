@@ -4,7 +4,8 @@ import {
   SET_ERRORS,
   LOADING_UI,
   CLEAR_ERRORS,
-  SET_UNAUTHENTICATED
+  SET_UNAUTHENTICATED,
+  LOADING_USER
 } from "../types";
 
 export const loginUser = (userData, history) => dispatch => {
@@ -58,13 +59,27 @@ export const logoutUser = () => dispatch => {
 };
 
 export const getUserData = () => dispatch => {
+  dispatch({ type: LOADING_USER });
   axios
-    .get("/user/all")
+    .get("/user")
     .then(res => {
       dispatch({
         type: SET_USER,
         payload: res.data
       });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+export const uploadImage = formData => dispatch => {
+  dispatch({ type: LOADING_USER });
+  console.log(formData);
+  axios
+    .post("/user/image", formData)
+    .then(res => {
+      dispatch(getUserData());
     })
     .catch(err => {
       console.log(err);

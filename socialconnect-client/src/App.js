@@ -14,13 +14,13 @@ import themeFile from "./util/theme";
 import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 //Components
-import NavBar from "./components/Navbar";
+import NavBar from "./components/navigation/Navbar";
 import AuthRoute from "./util/AuthRoute";
 
 // PAGES
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
+import Home from "./components/pages/Home";
+import Login from "./components/pages/Login";
+import SignUp from "./components/pages/SignUp";
 import axios from "axios";
 
 const theme = createMuiTheme(themeFile);

@@ -27,18 +27,13 @@ const styles = {
 
 class Scream extends Component {
   render() {
+    //init daysjs helper middleware
     dayjs.extend(relativeTime);
+
+    //destructure props
     const {
       classes,
-      scream: {
-        body,
-        createdAt,
-        userImage,
-        userHandle,
-        screamId,
-        likeCount,
-        commentCount
-      }
+      scream: { body, createdAt, userImage, userHandle }
     } = this.props;
     return (
       <Card className={classes.card}>
@@ -56,10 +51,10 @@ class Scream extends Component {
           >
             {userHandle}
           </Typography>
+          <Typography variant="body1">{body}</Typography>
           <Typography variant="body2" color="textSecondary">
             {dayjs(createdAt).fromNow()}
           </Typography>
-          <Typography variant="body1">{body}</Typography>
         </CardContent>
       </Card>
     );

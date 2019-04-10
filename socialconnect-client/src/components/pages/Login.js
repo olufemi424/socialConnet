@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-//images
-import AppIcon from "../images/connect.png";
-
 // redux
 import { connect } from "react-redux";
 //actions
-import { signupUser } from "../store/actions/userActions";
+import { loginUser } from "../../store/actions/userActions";
+
+//images
+import AppIcon from "../../images/connect.png";
 
 // MUI
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -22,12 +22,10 @@ const styles = theme => ({
   ...theme
 });
 
-export class SignUp extends Component {
+export class Login extends Component {
   state = {
     email: "",
     password: "",
-    confirmPassword: "",
-    handle: "",
     loading: false,
     errors: {}
   };
@@ -41,16 +39,16 @@ export class SignUp extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const newUserData = {
+    //USER DATA
+    const userData = {
       email: this.state.email,
-      password: this.state.password,
-      confirmPassword: this.state.confirmPassword,
-      handle: this.state.handle
+      password: this.state.password
     };
-
-    this.props.signupUser(newUserData, this.props.history);
+    //CALL ACTIONS
+    this.props.loginUser(userData, this.props.history);
   };
 
+  // HANDLE CHANGE
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -58,12 +56,10 @@ export class SignUp extends Component {
   };
 
   render() {
-    //props from redux
     const {
       classes,
       UI: { loading }
     } = this.props;
-
     const { errors } = this.state;
 
     return (
@@ -72,7 +68,7 @@ export class SignUp extends Component {
         <Grid item sm>
           <img src={AppIcon} alt="App Icon" className={classes.imageStyle} />{" "}
           <Typography variant="h2" className={classes.pageTitle}>
-            Sign up
+            Login
           </Typography>
           <form noValidate onSubmit={this.handleSubmit}>
             <TextField
@@ -99,30 +95,6 @@ export class SignUp extends Component {
               error={errors.password ? true : false}
               fullWidth
             />
-            <TextField
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              label="Confirm Password"
-              className={classes.textField}
-              value={this.state.confirmPassword}
-              onChange={this.handleChange}
-              helperText={errors.confirmPassword}
-              error={errors.confirmPassword ? true : false}
-              fullWidth
-            />
-            <TextField
-              id="handle"
-              name="handle"
-              type="text"
-              label="Handle"
-              className={classes.textField}
-              value={this.state.handle}
-              onChange={this.handleChange}
-              helperText={errors.handle}
-              error={errors.handle ? true : false}
-              fullWidth
-            />
             {errors.general && (
               <Typography variant="body2" className={classes.customError}>
                 {errors.general}
@@ -136,14 +108,14 @@ export class SignUp extends Component {
               disabled={loading}
             >
               {" "}
-              Signup
+              Login
               {loading && (
                 <CircularProgress className={classes.progress} size={30} />
               )}
             </Button>
             <br />
             <small>
-              Already have an account ? login <Link to="/login"> here</Link>{" "}
+              Don't have an account ? sign up <Link to="/signup"> here</Link>{" "}
             </small>
           </form>
         </Grid>
@@ -153,9 +125,9 @@ export class SignUp extends Component {
   }
 }
 
-SignUp.propType = {
+Login.propType = {
   classes: PropTypes.object.isRequired,
-  signupUser: PropTypes.func.isRequired,
+  loginUser: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   UI: PropTypes.object.isRequired
 };
@@ -166,10 +138,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  signupUser
+  loginUser
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(SignUp));
+)(withStyles(styles)(Login));

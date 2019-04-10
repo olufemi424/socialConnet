@@ -1,8 +1,14 @@
-import { SET_USER, SET_AUTHENTICATED, SET_UNAUTHENTICATED } from "../types";
+import {
+  SET_USER,
+  SET_AUTHENTICATED,
+  SET_UNAUTHENTICATED,
+  LOADING_USER
+} from "../types";
 
 //INITIAL AUTH STATE OF STORE
 const initialState = {
   isAuthenticated: false,
+  loading: false,
   credentials: {},
   likes: [],
   notifications: []
@@ -22,7 +28,13 @@ export default function(state = initialState, action) {
     case SET_USER:
       return {
         isAuthenticated: true,
+        loading: true,
         ...action.payload
+      };
+    case LOADING_USER:
+      return {
+        ...state,
+        loading: true
       };
     default:
       return state;
