@@ -19,6 +19,10 @@ body {
   justify-content: space-between;
 }
 
+.toolbar-container svg {
+  fill: #fff;
+}
+
 a {
   text-decoration: none;
 }

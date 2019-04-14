@@ -2,7 +2,7 @@ export default {
   palette: {
     primary: {
       light: "#33c9dc",
-      main: "#00bcd4",
+      main: "#4367B2",
       dark: "#008394",
       contrastText: "#fff"
     },
@@ -48,16 +48,16 @@ export default {
       position: "relative",
       "& button": {
         position: "absolute",
-        top: "80%",
+        top: "40%",
         left: "70%"
       }
     },
     "& .profile-image": {
-      width: 200,
-      height: 200,
+      width: 180,
+      height: 180,
       objectFit: "cover",
       maxWidth: "100%",
-      borderRadius: "50%"
+      borderRadius: "45%"
     },
     "& .profile-details": {
       textAlign: "center",

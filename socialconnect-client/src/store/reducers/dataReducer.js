@@ -1,10 +1,42 @@
+import {
+  SET_SCREAMS,
+  LOADING_DATA,
+  LIKE_SCREAM,
+  UNLIKE_SCREAM
+} from "../types";
+
 //INITIAL AUTH STATE OF STORE
 const initialState = {
-  isAuthenticated: false,
-  data: {}
+  screams: [],
+  scream: {},
+  loading: false
 };
 
 //SWITCH CASES TESTING FOR ACTIONS TYPES TO UPDATE THE STORE
 export default function(state = initialState, action) {
-  return state;
+  switch (action.type) {
+    case LOADING_DATA:
+      return {
+        ...state,
+        loading: true
+      };
+    case SET_SCREAMS:
+      return {
+        ...state,
+        screams: action.payload,
+        loading: false
+      };
+    case LIKE_SCREAM:
+    case UNLIKE_SCREAM:
+      let index = state.screams.findIndex(
+        scream => scream.screamId === action.payload.screamId
+      );
+      state.screams[index] = action.payload;
+      return {
+        ...state
+      };
+
+    default:
+      return state;
+  }
 }
