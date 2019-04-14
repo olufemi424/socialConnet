@@ -10,7 +10,7 @@ exports.signUp = (req, res) => {
     handle: req.body.handle
   };
 
-  // TODO validate data
+  // validate data
   const { valid, errors } = Validator.validateSignUpData(newUser);
 
   if (!valid) return res.status(400).json(errors);
@@ -204,57 +204,58 @@ exports.uploadImage = (req, res) => {
   const os = require("os");
   const fs = require("fs");
 
-  const busboy = new BusBoy({ headers: req.headers });
-  req.pipe(busboy);
+  console.log(req.body);
 
+  const busboy = new BusBoy({ headers: req.headers });
+
+  let imageToBeUploaded = {};
   let imageFileName;
-  const imageToBeUploaded = {};
 
   busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-    console.log(fieldname, file, filename, encoding, mimetype);
+    if (mimetype !== "image/jpeg" && mimetype !== "image/png") {
+      return res.status(400).json({ error: "Wrong file type submitted" });
+    }
 
-    //image extension
+    console.log(filename);
+    // grab image extension my.image.png => ['my', 'image', 'png']
     const imageExtension = filename.split(".")[filename.split(".").length - 1];
-    //image file name
-    const imageFileName = `${Math.round(
+    // build image filename : 32756238461724837.png
+    imageFileName = `${Math.round(
       Math.random() * 1000000000000
-    )}.${imageExtension}`;
-    //join path
-    const filePath = path.join(os.tmpdir(), imageFileName);
-
-    imageToBeUploaded = { filePath, mimetype };
-    file.pipe(fs.createWriteStream(filePath));
+    ).toString()}.${imageExtension}`;
+    const filepath = path.join(os.tmpdir(), imageFileName);
+    imageToBeUploaded = { filepath, mimetype };
+    file.pipe(fs.createWriteStream(filepath));
   });
 
   busboy.on("finish", () => {
     admin
       .storage()
       .bucket()
-      .upload(imageToBeUploaded.filePath, {
+      .upload(imageToBeUploaded.filepath, {
         resumable: false,
         metadata: {
           metadata: {
-            contentType: imageToBeUploaded.minetype
+            contentType: imageToBeUploaded.mimetype
           }
         }
       })
       .then(() => {
         const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${
           config.storageBucket
-        }/0/${imageFileName}?alt=media`;
-
-        return db
-          .doc(`/users/${req.user.handle}`)
-          .update({ imageUrl })
-          .then(() => {
-            return res.json({ message: "Image uploaded successfully" });
-          })
-          .catch(err => {
-            console.log(err);
-            return res.status("500").json({ err: err.code });
-          });
+        }/o/${imageFileName}?alt=media`;
+        return db.doc(`/users/${req.user.handle}`).update({ imageUrl });
+      })
+      .then(() => {
+        return res.json({ message: "image uploaded successfully" });
+      })
+      .catch(err => {
+        console.error(err);
+        return res.status(500).json({ error: "something went wrong" });
       });
   });
+
+  busboy.end(req.rawBody);
 };
 
 //mark notification as read
