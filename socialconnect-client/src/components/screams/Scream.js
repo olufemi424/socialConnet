@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 
 //components
 import MyButton from "../../util/MyButtom";
+import DeleteScream from "./DeleteScream";
 
 //actions
 import { likeScream, unLikeScream } from "../../store/actions/dataActions";
@@ -26,7 +27,8 @@ import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 const styles = {
   card: {
     display: "flex",
-    marginBottom: 20
+    marginBottom: 20,
+    position: "relative"
   },
   image: {
     minWidth: 200,
@@ -39,6 +41,7 @@ const styles = {
 };
 
 class Scream extends Component {
+  //check if user has already liked
   likedScream = () => {
     if (
       this.props.user.likes &&
@@ -50,10 +53,12 @@ class Scream extends Component {
     } else return false;
   };
 
+  //like scream action call
   likeScream = () => {
     this.props.likeScream(this.props.scream.screamId);
   };
 
+  //unlike scream action call
   unlikeScream = () => {
     this.props.unLikeScream(this.props.scream.screamId);
   };
@@ -64,18 +69,23 @@ class Scream extends Component {
 
     //destructure props
     const {
-      user: { isAuthenticated },
+      user: {
+        isAuthenticated,
+        credentials: { handle }
+      },
       classes,
-      scream: { body, createdAt, userImage, userHandle, likeCount }
+      scream: { body, createdAt, userImage, userHandle, likeCount, screamId }
     } = this.props;
 
     const likeButton = !isAuthenticated ? (
+      //direct to login if not authenticated
       <Link to="/login">
         <MyButton tip="Like">
           <FavoriteBorder color="primary" />
         </MyButton>
       </Link>
     ) : this.likedScream() ? (
+      //allow to perform action if authenticated and tuggle like and unlike
       <MyButton tip="Undo like" onClick={this.unlikeScream}>
         <FavoriteIcon color="primary" />
       </MyButton>
@@ -85,6 +95,10 @@ class Scream extends Component {
       </MyButton>
     );
 
+    const deleteButton =
+      isAuthenticated && userHandle === handle ? (
+        <DeleteScream screamId={screamId} />
+      ) : null;
     return (
       <Card className={classes.card}>
         <CardMedia
@@ -101,6 +115,7 @@ class Scream extends Component {
           >
             {userHandle}
           </Typography>
+          {deleteButton}
           <Typography variant="body1">{body}</Typography>
           <Typography variant="body2" color="textSecondary">
             {dayjs(createdAt).fromNow()}

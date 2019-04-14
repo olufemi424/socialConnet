@@ -20,6 +20,8 @@ export default {
     textAlign: "center"
   },
   imageStyle: {
+    minWidth: 90,
+    minHeight: 90,
     width: 90,
     height: 90,
     margin: "10px auto"
@@ -42,6 +44,9 @@ export default {
   paper: {
     padding: 20
   },
+  card: {
+    position: "relative"
+  },
   profile: {
     "& .image-wrapper": {
       textAlign: "center",
@@ -52,6 +57,7 @@ export default {
         left: "70%"
       }
     },
+
     "& .profile-image": {
       width: 180,
       height: 180,
