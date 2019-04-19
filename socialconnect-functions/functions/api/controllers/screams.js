@@ -54,10 +54,10 @@ exports.postOneScream = (req, res) => {
     });
 };
 
+//get one scream
 exports.getScream = (req, res) => {
   let screamData = {};
-
-  //get single scream
+  //get single scream from db
   db.doc(`/screams/${req.params.screamId}`)
     .get()
     .then(doc => {
@@ -67,7 +67,6 @@ exports.getScream = (req, res) => {
 
       screamData = doc.data();
       screamData.screamId = doc.id;
-
       //get comments
       return db
         .collection("comments")
@@ -81,7 +80,6 @@ exports.getScream = (req, res) => {
       data.forEach(doc => {
         screamData.comments.push(doc.data());
       });
-
       return res.status(200).json(screamData);
     })
     .catch(err => {
