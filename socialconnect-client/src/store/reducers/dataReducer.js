@@ -3,7 +3,8 @@ import {
   LOADING_DATA,
   LIKE_SCREAM,
   UNLIKE_SCREAM,
-  DELETE_SCREAM
+  DELETE_SCREAM,
+  POST_SCREAM
 } from "../types";
 
 //INITIAL AUTH STATE OF STORE
@@ -36,7 +37,11 @@ export default function(state = initialState, action) {
       return {
         ...state
       };
-
+    case POST_SCREAM:
+      return {
+        ...state,
+        screams: [action.payload, ...state.screams]
+      };
     case DELETE_SCREAM:
       index = state.screams.findIndex(
         scream => scream.screamId === action.payload

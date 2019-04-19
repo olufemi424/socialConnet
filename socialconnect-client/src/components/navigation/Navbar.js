@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 //component
 import MyButton from "../../util/MyButtom";
+import PostScream from "../screams/PostScream";
 
 // MUI
 import AppBar from "@material-ui/core/AppBar";
@@ -22,9 +23,7 @@ export class Navbar extends Component {
 
     const navOption = isAuthenticated ? (
       <Fragment>
-        <MyButton tip="post a Scream">
-          <AddIcon color="primary" />
-        </MyButton>
+        <PostScream />
         <MyButton tip="Notifications">
           <Notifications color="primary" />
         </MyButton>

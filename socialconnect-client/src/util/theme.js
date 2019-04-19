@@ -89,5 +89,10 @@ export default {
     "& a": {
       margin: "20px 10px"
     }
+  },
+  closeButton: {
+    position: "absolute",
+    left: "91%",
+    top: "6%"
   }
 };

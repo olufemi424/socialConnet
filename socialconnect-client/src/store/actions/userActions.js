@@ -68,7 +68,7 @@ export const getUserData = () => dispatch => {
       });
     })
     .catch(err => {
-      console.log("Unauthorized");
+      console.log("Unauthorized ~ user need to login");
       console.log(err);
     });
 };
