@@ -5,7 +5,8 @@ import {
   LIKE_SCREAM,
   UNLIKE_SCREAM,
   DELETE_SCREAM,
-  POST_SCREAM
+  POST_SCREAM,
+  SUBMIT_COMMENT
 } from "../types";
 
 //INITIAL AUTH STATE OF STORE
@@ -59,6 +60,15 @@ export default function(state = initialState, action) {
       state.screams.splice(index, 1);
       return {
         ...state
+      };
+
+    case SUBMIT_COMMENT:
+      return {
+        ...state,
+        scream: {
+          ...state.scream,
+          comments: [action.payload, ...state.scream.comments]
+        }
       };
 
     default:

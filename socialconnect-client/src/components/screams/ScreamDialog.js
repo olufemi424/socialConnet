@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import LikeButton from "../button/LikeButton";
 import MyButton from "../../util/MyButtom";
 import Comments from "./Comments";
+import CommentForm from "./CommentForm";
 
 //actions
 import { getScream, clearErrors } from "../../store/actions/dataActions";
@@ -64,6 +65,7 @@ class ScreamDialog extends Component {
 
   handleClose = () => {
     this.setState({ open: false });
+    this.props.clearErrors();
   };
 
   render() {
@@ -114,6 +116,7 @@ class ScreamDialog extends Component {
           <span>{commentCount} comments</span>
         </Grid>
         <hr className={classes.visibleSeparator} />
+        <CommentForm screamId={screamId} />
         <Comments comments={comments} />
       </Grid>
     );
@@ -154,7 +157,7 @@ ScreamDialog.propTypes = {
   getScream: PropTypes.func.isRequired,
   screamId: PropTypes.string.isRequired,
   userHandle: PropTypes.string.isRequired,
-  //   scream: PropTypes.object.isRequired,
+  scream: PropTypes.object.isRequired,
   UI: PropTypes.object.isRequired
 };
 
