@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 //actions
-import { postScream } from "../../store/actions/dataActions";
+import { postScream, clearErrors } from "../../store/actions/dataActions";
 
 // MUI components
 import MyButton from "../../util/MyButtom";
@@ -39,8 +39,7 @@ export class PostScream extends Component {
     }
 
     if (!nextProps.UI.errors && !nextProps.UI.loading) {
-      this.setState({ scream: "" });
-      this.handleClose();
+      this.setState({ scream: "", errors: {}, open: false });
     }
   }
 
@@ -49,6 +48,7 @@ export class PostScream extends Component {
   };
 
   handleClose = () => {
+    this.props.clearErrors();
     this.setState({ open: false, errors: {} });
   };
 
@@ -124,6 +124,7 @@ export class PostScream extends Component {
 
 PostScream.protoType = {
   postScream: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   UI: PropTypes.object.isRequired
 };
@@ -134,5 +135,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { postScream }
+  { postScream, clearErrors }
 )(withStyles(styles)(PostScream));

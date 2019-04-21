@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
+//action
+import { logoutUser } from "../../store/actions/userActions";
+
 //component
 import MyButton from "../../util/MyButtom";
 import PostScream from "../screams/PostScream";
@@ -14,7 +17,6 @@ import Button from "@material-ui/core/Button";
 
 // Icons
 import HomeIcon from "@material-ui/icons/Home";
-import AddIcon from "@material-ui/icons/Add";
 import Notifications from "@material-ui/icons/Notifications";
 
 export class Navbar extends Component {
@@ -27,6 +29,9 @@ export class Navbar extends Component {
         <MyButton tip="Notifications">
           <Notifications color="primary" />
         </MyButton>
+        <Button color="inherit" onClick={this.props.logoutUser}>
+          Logout
+        </Button>
       </Fragment>
     ) : (
       <Fragment>
@@ -57,11 +62,15 @@ export class Navbar extends Component {
 }
 
 Navbar.propType = {
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired,
+  logoutUser: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   isAuthenticated: state.user.isAuthenticated
 });
 
-export default connect(mapStateToProps)(Navbar);
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(Navbar);
