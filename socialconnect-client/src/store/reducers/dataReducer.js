@@ -45,6 +45,7 @@ export default function(state = initialState, action) {
       if (state.scream.screamId === action.payload.screamId) {
         state.scream = action.payload;
       }
+      console.log(state);
       return {
         ...state
       };

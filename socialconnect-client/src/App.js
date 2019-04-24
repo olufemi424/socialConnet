@@ -3,25 +3,27 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import "./App.css";
 import { Provider } from "react-redux";
+import axios from "axios";
 import store from "./store/store";
 import { SET_AUTHENTICATED } from "./store/types";
 import { getUserData, logoutUser } from "./store/actions/userActions";
 
-//themefile
-import themeFile from "./util/theme";
-
-// MUI THEME
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 //Components
 import NavBar from "./components/navigation/Navbar";
 import AuthRoute from "./util/AuthRoute";
+
+//themefile
+import themeFile from "./util/theme";
 
 // PAGES
 import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import SignUp from "./components/pages/SignUp";
-import axios from "axios";
+import UserProfile from "./components/pages/UserProfile";
+
+// MUI THEME
+import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 
 const theme = createMuiTheme(themeFile);
 
@@ -50,6 +52,7 @@ class App extends Component {
                 <Route exact path="/" component={Home} />
                 <AuthRoute exact path="/login" component={Login} />
                 <AuthRoute exact path="/signup" component={SignUp} />
+                <Route exact path="/user/:handle" component={UserProfile} />
               </Switch>
             </div>
           </Router>

@@ -104,6 +104,16 @@ export const deleteScream = screamId => async dispatch => {
   }
 };
 
+export const getUserDetails = userHandle => async dispatch => {
+  dispatch({ type: LOADING_DATA });
+  try {
+    const res = await axios.get(`/user/${userHandle}`);
+    dispatch({ type: SET_SCREAMS, payload: res.data.screams });
+  } catch (err) {
+    dispatch({ type: SET_SCREAMS, payload: null });
+  }
+};
+
 export const clearErrors = () => dispatch => {
   dispatch({ type: CLEAR_ERRORS });
 };
