@@ -10,10 +10,14 @@ import Grid from "@material-ui/core/Grid";
 import { getUserDetails } from "../../store/actions/dataActions";
 
 export class User extends Component {
-  state = { profile: null };
+  state = { profile: null, screamIdParam: null };
 
   componentDidMount() {
     const handle = this.props.match.params.handle;
+    const screamId = this.props.match.params.screamId;
+
+    if (screamId) this.setState({ screamIdParam: screamId });
+
     this.props.getUserDetails(handle);
     this.getStaticProfile(handle);
   }
@@ -29,11 +33,25 @@ export class User extends Component {
 
   render() {
     const { screams, loading } = this.props;
+    const { screamIdParam } = this.state;
 
     //get user scream mockup
     const userScreams =
       screams.length >= 1 ? (
-        screams.map(scream => <Scream key={scream.screamId} scream={scream} />)
+        !screamIdParam ? (
+          screams.map(scream => (
+            <Scream key={scream.screamId} scream={scream} />
+          ))
+        ) : (
+          screams.map(scream => {
+            if (scream.screamId !== screamIdParam)
+              return <Scream key={scream.screamId} scream={scream} />;
+            else
+              return (
+                <Scream key={scream.screamId} scream={scream} openDialog />
+              );
+          })
+        )
       ) : (
         <p>No Scream from user</p>
       );

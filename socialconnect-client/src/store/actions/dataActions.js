@@ -64,6 +64,7 @@ export const postScream = screamData => async dispatch => {
 
 // likd a scream
 export const likeScream = screamId => async dispatch => {
+  // console.log(screamId);
   try {
     const res = await axios.post(`/scream/like/${screamId}/`);
     dispatch({ type: LIKE_SCREAM, payload: res.data });
@@ -74,6 +75,7 @@ export const likeScream = screamId => async dispatch => {
 
 // likd a scream
 export const unLikeScream = screamId => async dispatch => {
+  // console.log(screamId);
   try {
     const res = await axios.post(`/scream/unlike/${screamId}/`);
     dispatch({ type: UNLIKE_SCREAM, payload: res.data });

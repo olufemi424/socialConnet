@@ -23,13 +23,13 @@ class Profile extends Component {
     const {
       classes,
       loading,
-      user: { isAuthenticated, credentials }
+      user: { isAuthenticated, credentials, errors }
     } = this.props;
 
     let profileIsAuthenticated = isAuthenticated ? (
       <ProfileDetails credentials={credentials} classes={classes} />
     ) : (
-      <UserRedirectLinks classes={classes} />
+      <UserRedirectLinks classes={classes} errors={errors} />
     );
 
     let profileMarkup = !loading ? profileIsAuthenticated : <p>Loading...</p>;

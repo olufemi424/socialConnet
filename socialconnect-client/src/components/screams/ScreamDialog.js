@@ -53,17 +53,40 @@ const styles = theme => ({
 
 class ScreamDialog extends Component {
   state = {
-    open: false
+    open: false,
+    oldPath: null,
+    newPath: null
   };
 
-  handleOpen = () => {
-    const { screamId } = this.props;
+  componentDidMount() {
+    if (this.props.openDialog) {
+      this.handleOpen();
+    }
+  }
 
-    this.setState({ open: true });
+  handleOpen = () => {
+    const { screamId, userHandle } = this.props;
+
+    //get old path of window
+    let oldPath = window.location.pathname;
+
+    //construct new path of window when the dialogue is open
+    const newPath = `/user/${userHandle}/scream/${screamId}`;
+
+    //keep track of old path if copy and paste url go back to users page
+    if (oldPath === newPath) oldPath = `/user/${userHandle}`;
+
+    // set the state of the url to new path
+    window.history.pushState(null, null, newPath);
+
+    this.setState({ open: true, oldPath, newPath });
     this.props.getScream(screamId);
   };
 
   handleClose = () => {
+    //set the the path back to the old path
+    window.history.pushState(null, null, this.state.oldPath);
+
     this.setState({ open: false });
     this.props.clearErrors();
   };
@@ -117,7 +140,7 @@ class ScreamDialog extends Component {
         </Grid>
         <hr className={classes.visibleSeparator} />
         <CommentForm screamId={screamId} />
-        {/* <Comments comments={comments} /> */}
+        {comments && <Comments comments={comments} />}
       </Grid>
     );
 

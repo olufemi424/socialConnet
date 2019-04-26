@@ -12,11 +12,11 @@ import theme from "../../util/theme";
 
 export class ProfileRedirectLinks extends Component {
   render() {
-    const { classes } = this.props;
+    const { classes, errors } = this.props;
     return (
       <Paper className={classes.paper}>
         <Typography variant="body2" align="center">
-          No Profile found, please login again
+          {errors ? errors.message : "No Profile found, please login again"}
         </Typography>
         <div className={classes.buttons}>
           <Button

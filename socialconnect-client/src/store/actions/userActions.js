@@ -5,7 +5,8 @@ import {
   LOADING_UI,
   CLEAR_ERRORS,
   SET_UNAUTHENTICATED,
-  LOADING_USER
+  LOADING_USER,
+  UNAUTHORIZED_USER_ERROR
 } from "../types";
 
 export const loginUser = (userData, history) => async dispatch => {
@@ -68,8 +69,11 @@ export const getUserData = () => dispatch => {
       });
     })
     .catch(err => {
+      dispatch({
+        type: UNAUTHORIZED_USER_ERROR,
+        payload: "Unauthorized ~ user need to login"
+      });
       console.log("Unauthorized ~ user need to login");
-      console.log(err);
     });
 };
 

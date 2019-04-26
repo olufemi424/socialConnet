@@ -38,16 +38,19 @@ export default function(state = initialState, action) {
       };
     case LIKE_SCREAM:
     case UNLIKE_SCREAM:
-      let index = state.screams.findIndex(
+      const newState = { ...state };
+      let index = newState.screams.findIndex(
         scream => scream.screamId === action.payload.screamId
       );
-      state.screams[index] = action.payload;
-      if (state.scream.screamId === action.payload.screamId) {
-        state.scream = action.payload;
+
+      console.log(index);
+      newState.screams[index] = action.payload;
+      if (newState.scream.screamId === action.payload.screamId) {
+        newState.scream = action.payload;
       }
-      console.log(state);
+
       return {
-        ...state
+        ...newState
       };
     case POST_SCREAM:
       return {

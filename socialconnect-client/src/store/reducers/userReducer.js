@@ -4,7 +4,8 @@ import {
   SET_UNAUTHENTICATED,
   LOADING_USER,
   LIKE_SCREAM,
-  UNLIKE_SCREAM
+  UNLIKE_SCREAM,
+  UNAUTHORIZED_USER_ERROR
 } from "../types";
 
 //INITIAL AUTH STATE OF STORE
@@ -13,7 +14,8 @@ const initialState = {
   loading: false,
   credentials: {},
   likes: [],
-  notifications: []
+  notifications: [],
+  errors: {}
 };
 
 //SWITCH CASES TESTING FOR ACTIONS TYPES TO UPDATE THE STORE
@@ -26,6 +28,12 @@ export default function(state = initialState, action) {
       };
     case SET_UNAUTHENTICATED:
       return initialState;
+
+    case UNAUTHORIZED_USER_ERROR:
+      return {
+        ...state,
+        errors: { message: action.payload }
+      };
 
     case SET_USER:
       return {
