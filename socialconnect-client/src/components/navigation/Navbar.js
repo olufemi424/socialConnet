@@ -9,6 +9,7 @@ import { logoutUser } from "../../store/actions/userActions";
 //component
 import MyButton from "../../util/MyButtom";
 import PostScream from "../screams/PostScream";
+import Notifications from "../notifications/Notifications";
 
 // MUI
 import AppBar from "@material-ui/core/AppBar";
@@ -17,7 +18,6 @@ import Button from "@material-ui/core/Button";
 
 // Icons
 import HomeIcon from "@material-ui/icons/Home";
-import Notifications from "@material-ui/icons/Notifications";
 
 export class Navbar extends Component {
   render() {
@@ -26,9 +26,7 @@ export class Navbar extends Component {
     const navOption = isAuthenticated ? (
       <Fragment>
         <PostScream />
-        <MyButton tip="Notifications">
-          <Notifications color="primary" />
-        </MyButton>
+        <Notifications color="primary" />
         <Button color="inherit" onClick={this.props.logoutUser}>
           Logout
         </Button>

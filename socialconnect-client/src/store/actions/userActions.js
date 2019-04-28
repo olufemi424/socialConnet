@@ -6,7 +6,8 @@ import {
   CLEAR_ERRORS,
   SET_UNAUTHENTICATED,
   LOADING_USER,
-  UNAUTHORIZED_USER_ERROR
+  UNAUTHORIZED_USER_ERROR,
+  MARK_NOTIFICATIONS_READ
 } from "../types";
 
 export const loginUser = (userData, history) => async dispatch => {
@@ -90,13 +91,23 @@ export const uploadImage = formData => dispatch => {
 
 export const editUserDetails = userDetails => dispatch => {
   dispatch({ type: LOADING_USER });
-
-  axios
-    .post("/user", userDetails)
-    .then(() => {
+  try {
+    axios.post("/user", userDetails).then(res => {
       dispatch(getUserData());
-    })
-    .catch(err => console.log(err));
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const markNotificationsRead = notificationsId => dispatch => {
+  try {
+    axios.post("user/notifications", notificationsId).then(res => {
+      dispatch({ type: MARK_NOTIFICATIONS_READ });
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const setAuthorizationHeader = token => {

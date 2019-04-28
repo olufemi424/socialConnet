@@ -43,7 +43,6 @@ export default function(state = initialState, action) {
         scream => scream.screamId === action.payload.screamId
       );
 
-      console.log(index);
       newState.screams[index] = action.payload;
       if (newState.scream.screamId === action.payload.screamId) {
         newState.scream = action.payload;

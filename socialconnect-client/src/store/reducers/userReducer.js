@@ -5,7 +5,8 @@ import {
   LOADING_USER,
   LIKE_SCREAM,
   UNLIKE_SCREAM,
-  UNAUTHORIZED_USER_ERROR
+  UNAUTHORIZED_USER_ERROR,
+  MARK_NOTIFICATIONS_READ
 } from "../types";
 
 //INITIAL AUTH STATE OF STORE
@@ -63,6 +64,17 @@ export default function(state = initialState, action) {
         likes: state.likes.filter(
           like => like.screamId !== action.payload.screamId
         )
+      };
+
+    case MARK_NOTIFICATIONS_READ:
+      const stateCopy = { ...state };
+      if (stateCopy.notification) {
+        stateCopy.notification.forEach(
+          notification => (notification.read = true)
+        );
+      }
+      return {
+        ...stateCopy
       };
     default:
       return state;
