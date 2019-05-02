@@ -7,6 +7,7 @@ import { getScreams } from "../../store/actions/dataActions";
 
 //components
 import Scream from "./Scream";
+import ScreamSkeleton from "../../util/ScreamSkeleton";
 
 export class Screams extends Component {
   componentDidMount() {
@@ -18,7 +19,7 @@ export class Screams extends Component {
     let recentScreamsMarkup = !loading ? (
       screams.map(scream => <Scream key={scream.screamId} scream={scream} />)
     ) : (
-      <p>Loading...</p>
+      <ScreamSkeleton />
     );
     return recentScreamsMarkup;
   }

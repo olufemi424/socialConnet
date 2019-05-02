@@ -36,6 +36,9 @@ export class ProfileRedirectLinks extends Component {
             Signup
           </Button>
         </div>
+        <p style={{ width: "90%", margin: "0 auto", textAlign: "center" }}>
+          For testing purposes, login with admin@email.com, password admin123
+        </p>
       </Paper>
     );
   }

@@ -27,6 +27,10 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 
 const theme = createMuiTheme(themeFile);
 
+//config axios
+axios.defaults.baseURL =
+  "https://us-central1-socialconnect-ad8d3.cloudfunctions.net/api";
+
 // validate token before app entry
 const token = localStorage.FBIdToken;
 if (token) {

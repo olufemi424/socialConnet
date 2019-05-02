@@ -59,8 +59,8 @@ class ScreamDialog extends Component {
   };
 
   componentDidMount() {
-    console.log(this.props.openDialog);
     if (this.props.openDialog) {
+      this.setState({ open: true });
       this.handleOpen();
     }
   }

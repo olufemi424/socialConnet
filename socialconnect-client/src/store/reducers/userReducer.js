@@ -39,7 +39,7 @@ export default function(state = initialState, action) {
     case SET_USER:
       return {
         isAuthenticated: true,
-        loading: true,
+        loading: false,
         ...action.payload
       };
     case LOADING_USER:

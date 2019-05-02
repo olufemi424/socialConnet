@@ -9,6 +9,10 @@ import Grid from "@material-ui/core/Grid";
 //actions
 import { getUserDetails } from "../../store/actions/dataActions";
 
+//component
+import ScreamSkeleton from "../../util/ScreamSkeleton";
+import ProfileSkeleton from "../../util/ProfileSkeleton";
+
 export class User extends Component {
   state = { profile: null, screamIdParam: null };
 
@@ -53,10 +57,10 @@ export class User extends Component {
           })
         )
       ) : (
-        <p>No Scream from user</p>
+        <ScreamSkeleton />
       );
 
-    const screamsMarkup = loading ? <p>loading...</p> : userScreams;
+    const screamsMarkup = loading ? <ScreamSkeleton /> : userScreams;
 
     return (
       <Grid container spacing={16}>
@@ -65,7 +69,7 @@ export class User extends Component {
         </Grid>
         <Grid item sm={4} xs={12}>
           {this.state.profile === null ? (
-            <p>Loading Profile</p>
+            <ProfileSkeleton />
           ) : (
             <StaticProfile profile={this.state.profile} />
           )}

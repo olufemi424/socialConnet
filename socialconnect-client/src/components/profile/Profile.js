@@ -6,6 +6,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 //component
 import ProfileDetails from "./ProfileDetails";
 import UserRedirectLinks from "./UserRedirectLinks";
+import ProfileSkeleton from "../../util/ProfileSkeleton";
 
 //actions
 import { getUserData } from "../../store/actions/userActions";
@@ -22,19 +23,23 @@ class Profile extends Component {
     //props
     const {
       classes,
-      loading,
-      user: { isAuthenticated, credentials, errors }
+      user: { isAuthenticated, credentials, errors, loading }
     } = this.props;
 
-    let profileIsAuthenticated = isAuthenticated ? (
+    //skeleton loading
+    let profileDetailsIsReady = loading ? (
+      <ProfileSkeleton />
+    ) : (
       <ProfileDetails credentials={credentials} classes={classes} />
+    );
+    //is authenticated markup
+    let profileIsAuthenticated = isAuthenticated ? (
+      profileDetailsIsReady
     ) : (
       <UserRedirectLinks classes={classes} errors={errors} />
     );
 
-    let profileMarkup = !loading ? profileIsAuthenticated : <p>Loading...</p>;
-
-    return profileMarkup;
+    return profileIsAuthenticated;
   }
 }
 
