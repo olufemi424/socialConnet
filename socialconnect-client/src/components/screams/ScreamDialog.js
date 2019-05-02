@@ -54,11 +54,12 @@ const styles = theme => ({
 class ScreamDialog extends Component {
   state = {
     open: false,
-    oldPath: null,
-    newPath: null
+    oldPath: "",
+    newPath: ""
   };
 
   componentDidMount() {
+    console.log(this.props.openDialog);
     if (this.props.openDialog) {
       this.handleOpen();
     }
@@ -121,7 +122,7 @@ class ScreamDialog extends Component {
             component={Link}
             color="primary"
             variant="h5"
-            to={`/users/${userHandle}`}
+            to={`/user/${userHandle}`}
           >
             @{userHandle}
           </Typography>
