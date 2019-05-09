@@ -1,5 +1,6 @@
 import {
   SET_USER,
+  SET_USERS,
   SET_AUTHENTICATED,
   SET_UNAUTHENTICATED,
   LOADING_USER,
@@ -11,6 +12,7 @@ import {
 
 //INITIAL AUTH STATE OF STORE
 const initialState = {
+  users: [],
   isAuthenticated: false,
   loading: false,
   credentials: {},
@@ -35,13 +37,20 @@ export default function(state = initialState, action) {
         ...state,
         errors: { message: action.payload }
       };
-
     case SET_USER:
       return {
+        ...state,
         isAuthenticated: true,
         loading: false,
         ...action.payload
       };
+
+    case SET_USERS:
+      return {
+        ...state,
+        users: action.payload
+      };
+
     case LOADING_USER:
       return {
         ...state,

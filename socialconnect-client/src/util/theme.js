@@ -99,5 +99,10 @@ export default {
     width: "100%",
     borderBottom: "1px solid rgba(0,0,0,0.1)",
     marginBottom: 20
+  },
+  bigAvatar: {
+    margin: 3,
+    width: 60,
+    height: 60
   }
 };

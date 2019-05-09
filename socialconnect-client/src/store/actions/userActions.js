@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   SET_USER,
+  SET_USERS,
   SET_ERRORS,
   LOADING_UI,
   CLEAR_ERRORS,
@@ -10,6 +11,7 @@ import {
   MARK_NOTIFICATIONS_READ
 } from "../types";
 
+//Login action
 export const loginUser = (userData, history) => async dispatch => {
   dispatch({ type: LOADING_UI });
   try {
@@ -31,6 +33,7 @@ export const loginUser = (userData, history) => async dispatch => {
   }
 };
 
+//signup actions
 export const signupUser = (newUserData, history) => dispatch => {
   dispatch({ type: LOADING_UI });
   axios
@@ -59,6 +62,19 @@ export const logoutUser = () => dispatch => {
   dispatch({ type: SET_UNAUTHENTICATED });
 };
 
+//get all user
+export const getAllUsers = () => dispatch => {
+  axios
+    .get("/user/users")
+    .then(res => {
+      dispatch({ type: SET_USERS, payload: res.data });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+///get single user
 export const getUserData = () => dispatch => {
   dispatch({ type: LOADING_USER });
   axios

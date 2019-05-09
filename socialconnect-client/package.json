@@ -30,6 +30,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "proxy": "https://us-central1-socialconnect-ad8d3.cloudfunctions.net/api"
+  ]
 }

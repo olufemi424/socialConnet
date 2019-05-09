@@ -79,7 +79,7 @@ export class EditDetails extends Component {
     return (
       <Fragment>
         <MyButton
-          tip="Logout"
+          tip="Edit Profile"
           onClick={this.handleOpen}
           btnClassName={classes.button}
         >
