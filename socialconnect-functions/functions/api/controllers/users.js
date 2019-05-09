@@ -3,6 +3,7 @@ const { db, admin, firebase, config } = require("../util/admin");
 const Validator = require("../util/validators");
 
 exports.signUp = (req, res) => {
+  //user input out into an object
   const newUser = {
     email: req.body.email,
     password: req.body.password,
@@ -27,7 +28,7 @@ exports.signUp = (req, res) => {
           handle: "Handle is already taken"
         });
       } else {
-        firebase
+        return firebase
           .auth()
           .createUserWithEmailAndPassword(newUser.email, newUser.password)
           .then(data => {
@@ -53,15 +54,12 @@ exports.signUp = (req, res) => {
             return res.status(201).json({ token });
           })
           .catch(err => {
-            console.log(err);
-            res
+            return res
               .status(500)
               .json({ general: "Something went wrong, please try again" });
           });
       }
     });
-
-  busboy.end(req.rawBody);
 };
 
 // LOGIN USER
@@ -92,6 +90,26 @@ exports.login = (req, res) => {
         .status(403)
         .json({ general: "Wrong credentials, please try again" });
     });
+};
+
+//Get all users
+exports.getAllUsers = (req, res) => {
+  db.collection("users")
+    .get()
+    .then(data => {
+      let users = [];
+      data.forEach(doc => {
+        users.push({
+          userId: doc.data().userId,
+          handle: doc.data().handle,
+          createdAt: doc.data().createdAt,
+          likeCount: doc.data().likeCount,
+          userImage: doc.data().imageUrl
+        });
+      });
+      return res.status(200).json(users);
+    })
+    .catch(err => console.log(err));
 };
 
 // ADD USER DETAILS

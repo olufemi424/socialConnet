@@ -27,6 +27,11 @@ router.post("/", FBAuth, UserController.addUserDetails);
 router.get("/", FBAuth, UserController.getAuthenticatedUserDetails);
 
 // User end point
+// POST @ localhost:PORT/user/users
+// post a new user details
+router.get("/users", UserController.getAllUsers);
+
+// User end point
 // GET @ localhost:PORT/user/:handle
 // get any user details
 router.get("/:handle", UserController.getUserDetails);

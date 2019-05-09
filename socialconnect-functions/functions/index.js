@@ -2,7 +2,7 @@ const express = require("express");
 const functions = require("firebase-functions");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 const cors = require("cors");
 
 // SET UP EXPRESS
@@ -22,7 +22,7 @@ const screamRoutes = require("./api/routes/screams");
 const { db } = require("./api/util/admin");
 
 //Log our request types
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 
 //body parser
 app.use(bodyParser.urlencoded({ extended: false }));
